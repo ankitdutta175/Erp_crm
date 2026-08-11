@@ -10,7 +10,11 @@ const loginSchema = z.object({
   password: z.string().min(1, 'Password is required'),
 });
 
-export const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export const login = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     const { email, password } = loginSchema.parse(req.body);
 
@@ -19,13 +23,20 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     });
 
     if (!user) {
-      res.status(401).json({ success: false, message: 'Invalid email or password' });
+      res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
       return;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
-      res.status(401).json({ success: false, message: 'Invalid email or password' });
+      res.status(401).json({
+        success: false,
+        message: 'Invalid email or password',
+      });
       return;
     }
 
@@ -54,10 +65,17 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   }
 };
 
-export const getMe = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
+export const getMe = async (
+  req: AuthenticatedRequest,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
   try {
     if (!req.user) {
-      res.status(401).json({ success: false, message: 'Not authenticated' });
+      res.status(401).json({
+        success: false,
+        message: 'Not authenticated',
+      });
       return;
     }
 
@@ -73,7 +91,10 @@ export const getMe = async (req: AuthenticatedRequest, res: Response, next: Next
     });
 
     if (!user) {
-      res.status(404).json({ success: false, message: 'User not found' });
+      res.status(404).json({
+        success: false,
+        message: 'User not found',
+      });
       return;
     }
 
